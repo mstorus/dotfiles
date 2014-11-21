@@ -10,8 +10,8 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync)
 
-(global-set-key [24 4] (quote helm-ls-git-ls))
-(global-set-key [3 116] (quote neotree-find))
+(global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
+(global-set-key [?\C-c ?t] (quote neotree-find))
 
 (defun helm-do-ag-recursive (&optional non-recursive)
   "Like `helm-do-ag', but ags recursively by default."
@@ -20,4 +20,4 @@
          (helm-current-prefix-arg non-recursive))
     (call-interactively 'helm-do-ag)))
 
-(global-set-key [3 97] (quote helm-do-ag-recursive))
+(global-set-key [?\C-c ?a] (quote helm-do-ag-recursive))
