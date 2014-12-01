@@ -21,3 +21,6 @@
     (call-interactively 'helm-do-ag)))
 
 (global-set-key [?\C-c ?a] (quote helm-do-ag-recursive))
+
+(setf inhibit-splash-screen t)
+(setq initial-scratch-message "")
