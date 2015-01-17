@@ -10,6 +10,18 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync)
 
+(setq my:el-get-packages '(
+   el-get
+   ag
+   dtrt-indent
+   helm
+   helm-ag
+   helm-ls-git
+   neotree
+))
+(el-get 'sync my:el-get-packages)
+
+
 (global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
 (global-set-key [?\C-c ?t] (quote neotree-find))
 
@@ -21,6 +33,8 @@
     (call-interactively 'helm-do-ag)))
 
 (global-set-key [?\C-c ?a] (quote helm-do-ag-recursive))
+(setq-default helm-ag-always-set-extra-option t)
 
 (setf inhibit-splash-screen t)
 (setq initial-scratch-message "")
+(setq-default indent-tabs-mode nil)
