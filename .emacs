@@ -38,3 +38,7 @@
 (setf inhibit-splash-screen t)
 (setq initial-scratch-message "")
 (setq-default indent-tabs-mode nil)
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq electric-indent-chars '(?\n))))
