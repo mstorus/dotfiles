@@ -1,4 +1,4 @@
-export EDITOR="/usr/local/bin/emacs"
+export EDITOR="/usr/local/bin/emacs --no-init-file"
 
 # show git branch
 parse_git_branch() {
