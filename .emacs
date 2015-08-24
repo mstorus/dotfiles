@@ -19,11 +19,18 @@
    helm-ls-git
    neotree
    anzu
+   company-mode
+   golden-ratio
 ))
 (el-get 'sync my:el-get-packages)
 
 (global-anzu-mode +1)
 (setq column-number-mode t)
+(golden-ratio-mode 1)
+
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
+(setq web-mode-css-indent-offset 2)
 
 (global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
 (global-set-key [?\C-c ?t] (quote neotree-find))
