@@ -1,5 +1,13 @@
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
@@ -21,17 +29,22 @@
    anzu
    company-mode
    golden-ratio
+   flycheck
+   web-mode
+   yaml-mode
 ))
 (el-get 'sync my:el-get-packages)
 
 (global-anzu-mode +1)
 (setq column-number-mode t)
 (golden-ratio-mode 1)
+(add-hook 'after-init-hook 'global-company-mode)
 
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
 
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
@@ -60,8 +73,11 @@
 (setf inhibit-splash-screen t)
 (setq initial-scratch-message "")
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
 (setq-default helm-ag-always-set-extra-option t)
 
 (add-hook 'python-mode-hook
           (lambda ()
             (setq electric-indent-chars '(?\n))))
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
