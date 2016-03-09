@@ -1,3 +1,5 @@
+(setq debug-on-error t)
+
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (require 'package)
@@ -25,6 +27,7 @@
    helm
    helm-ag
    helm-ls-git
+   help-mode+
    neotree
    anzu
    company-mode
@@ -39,6 +42,7 @@
 (setq column-number-mode t)
 (golden-ratio-mode 1)
 (add-hook 'after-init-hook 'global-company-mode)
+(setq company-dabbrev-downcase nil)
 
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
@@ -74,10 +78,16 @@
 (setq initial-scratch-message "")
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
+(setq-default js-indent-level 2)
 (setq-default helm-ag-always-set-extra-option t)
 
 (add-hook 'python-mode-hook
           (lambda ()
             (setq electric-indent-chars '(?\n))))
+
+(setq flycheck-javascript-eslint-executable "~/eslint")
+(with-eval-after-load 'flycheck
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
+
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
