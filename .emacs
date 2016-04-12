@@ -38,11 +38,20 @@
 ))
 (el-get 'sync my:el-get-packages)
 
+(helm-mode 0)
 (global-anzu-mode +1)
 (setq column-number-mode t)
 (golden-ratio-mode 1)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
+
+(defun indent-or-complete ()
+  (interactive)
+  (if (looking-at "\\_>")
+      (company-complete-common)
+    (indent-according-to-mode)))
+
+(global-set-key (kbd "TAB") 'indent-or-complete)
 
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
@@ -85,7 +94,7 @@
           (lambda ()
             (setq electric-indent-chars '(?\n))))
 
-(setq flycheck-javascript-eslint-executable "~/eslint")
+(setq flycheck-javascript-eslint-executable "eslint-project-relative")
 (with-eval-after-load 'flycheck
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
