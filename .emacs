@@ -52,6 +52,11 @@
     (indent-according-to-mode)))
 
 (global-set-key (kbd "TAB") 'indent-or-complete)
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
