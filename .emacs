@@ -105,3 +105,4 @@
 
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(setq helm-always-two-windows t)
