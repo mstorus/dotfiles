@@ -33,7 +33,6 @@
    neotree
    anzu
    company-mode
-   golden-ratio
    flycheck
    web-mode
    yaml-mode
@@ -43,7 +42,6 @@
 (helm-mode 0)
 (global-anzu-mode +1)
 (setq column-number-mode t)
-(golden-ratio-mode 1)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
 
