@@ -129,3 +129,11 @@
 (setq yascroll:delay-to-hide nil)
 
 (set-face-attribute 'yascroll:thumb-text-area nil :background "white")
+
+(add-to-list
+ 'save-some-buffers-action-alist
+ '(?r
+   (lambda (buf)
+       (set-buffer buf)
+       (revert-buffer :ignore-auto :noconfirm))
+   "revert this buffer"))
