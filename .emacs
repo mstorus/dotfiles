@@ -5,6 +5,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
+; MELPA packages: string-inflection, whitespace-cleanup-mode
+
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
@@ -44,6 +46,13 @@
 (golden-ratio-mode 1)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
+
+(require 'string-inflection)
+
+(add-hook 'ruby-mode-hook 'whitespace-cleanup-mode)
+(add-hook 'js-mode-hook 'whitespace-cleanup-mode)
+(add-hook 'web-mode-hook 'whitespace-cleanup-mode)
+(setq whitespace-cleanup-mode-preserve-point t)
 
 (defun indent-or-complete ()
   (interactive)
