@@ -115,6 +115,9 @@
 
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
+;; make underscore part of word
+(add-hook 'ruby-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
 (setq helm-always-two-windows t)
 (setq
  neo-smart-open t
