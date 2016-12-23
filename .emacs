@@ -82,7 +82,7 @@
     ad-do-it))
 
 (global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
-(global-set-key [?\C-c ?t] (quote neotree-find))
+(global-set-key [?\C-c ?t] 'neotree-toggle)
 
 (require 'recentf)
 (recentf-mode 1)
@@ -116,6 +116,12 @@
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq helm-always-two-windows t)
+(setq
+ neo-smart-open t
+ neo-persist-show nil
+ neo-window-width 40
+)
+
 (global-yascroll-bar-mode t)
 (setq yascroll:delay-to-hide nil)
 
