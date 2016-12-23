@@ -36,11 +36,13 @@
    flycheck
    web-mode
    yaml-mode
+   yascroll
 ))
 (el-get 'sync my:el-get-packages)
 
 (helm-mode 0)
 (global-anzu-mode +1)
+(yascroll-bar-mode 1)
 (setq column-number-mode t)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
@@ -113,3 +115,7 @@
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq helm-always-two-windows t)
+(global-yascroll-bar-mode t)
+(setq yascroll:delay-to-hide nil)
+
+(set-face-attribute 'yascroll:thumb-text-area nil :background "white")
