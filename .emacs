@@ -145,7 +145,7 @@
 (global-yascroll-bar-mode t)
 (setq yascroll:delay-to-hide nil)
 
-;;  vc-annotate-previous-revision
+;;  vc-annotate-previous-annotation
 ;;
 ;;  A hash table mapping from file names to stacks of vc-annotate calls
 (defvar vc-annotate-call-stacks (make-hash-table :test 'equal))
@@ -196,7 +196,7 @@
                       (current-buffer)
                       (annotation-details-point prev-annotation)
                       vc-annotate-backend))))
-;;  end of vc-annotate-previous-revision
+;;  end of vc-annotate-previous-annotation
 
 (set-face-attribute 'yascroll:thumb-text-area nil :background "white")
 
