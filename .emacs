@@ -5,7 +5,7 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-; MELPA packages: string-inflection, whitespace-cleanup-mode, react-snippets
+; MELPA packages: string-inflection, whitespace-cleanup-mode
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -23,25 +23,37 @@
 (el-get 'sync)
 
 (setq my:el-get-packages '(
-   el-get
    ag
+   anzu
+   company-mode
    dtrt-indent
+   el-get
+   flycheck
+   go-mode
    helm
    helm-ag
    helm-ls-git
+   lsp-mode
    neotree
-   anzu
-   company-mode
-   flycheck
+   typescript-mode
    web-mode
    yaml-mode
-   yascroll
+   ;help-mode+
+   ;yascroll
 ))
 (el-get 'sync my:el-get-packages)
 
+(setq tramp-default-method "ssh")
+
+(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+
+(require 're-builder)
+(setq reb-re-syntax 'string)
+
+(when (display-graphic-p) (setq confirm-kill-emacs 'yes-or-no-p))
 (helm-mode 0)
 (global-anzu-mode +1)
-(yascroll-bar-mode 1)
+;(yascroll-bar-mode 1)
 (yas-global-mode 1)
 (setq column-number-mode t)
 (add-hook 'after-init-hook 'global-company-mode)
@@ -52,8 +64,12 @@
 (windmove-default-keybindings)
 
 (require 'string-inflection)
+;(require 'misc)
+;(global-set-key "\M-f" 'forward-to-word)
+
 (add-hook 'ruby-mode-hook 'whitespace-cleanup-mode)
 (add-hook 'js-mode-hook 'whitespace-cleanup-mode)
+(add-hook 'python-mode-hook 'whitespace-cleanup-mode)
 (add-hook 'web-mode-hook 'whitespace-cleanup-mode)
 (setq whitespace-cleanup-mode-preserve-point t)
 
@@ -70,14 +86,13 @@
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
-(add-to-list 'load-path "~/src/react-snippets.el")
-(require 'react-snippets)
-
-(setq css-indent-offset 2)
-(setq web-mode-markup-indent-offset 2)
-(setq web-mode-code-indent-offset 2)
-(setq web-mode-css-indent-offset 2)
+(setq css-indent-offset 4)
+(setq web-mode-markup-indent-offset 4)
+(setq web-mode-code-indent-offset 4)
+(setq web-mode-css-indent-offset 4)
 (setq web-mode-attr-indent-offset 2)
+(setq web-mode-indentation-params '("case-extra-offset" . nil))
+(setq web-mode-enable-auto-quoting nil)
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
@@ -89,13 +104,15 @@
     ad-do-it))
 
 (global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
-(global-set-key [?\C-c ?t] 'neotree-toggle)
+(global-set-key [?\C-c ?t] 'neotree-find)
 
 (require 'recentf)
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf! (because of Tramp mode)
 (recentf-mode 1)
 (setq recentf-max-menu-items 50)
 (setq recentf-max-saved-items 50)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+(global-set-key "\C-x\ \C-b" 'helm-mini)
 
 (defun helm-do-ag-recursive (&optional non-recursive)
   "Like `helm-do-ag', but ags recursively by default."
@@ -109,14 +126,16 @@
 (setf inhibit-splash-screen t)
 (setq initial-scratch-message "")
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
-(setq-default js-indent-level 2)
+(setq-default tab-width 4)
+(setq-default js-indent-level 4)
 (setq-default helm-ag-always-set-extra-option t)
+(setq-default helm-ag-insert-at-point (quote word))
 
 (add-hook 'python-mode-hook
           (lambda ()
             (setq electric-indent-chars '(?\n))))
 
+;; (setq flycheck-javascript-eslint-executable "eslint-project-relative")
 (with-eval-after-load 'flycheck
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
@@ -134,6 +153,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 ;; make underscore part of word
 (add-hook 'ruby-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+(add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
 (setq helm-always-two-windows t)
 (setq
@@ -142,11 +162,11 @@
  neo-window-width 30
 )
 
-(global-yascroll-bar-mode t)
-(setq yascroll:delay-to-hide nil)
+;(global-yascroll-bar-mode t)
+;(setq yascroll:delay-to-hide nil)
 
-;;  vc-annotate-previous-annotation
-;;
+;(set-face-attribute 'yascroll:thumb-text-area nil :background "white")
+
 ;;  A hash table mapping from file names to stacks of vc-annotate calls
 (defvar vc-annotate-call-stacks (make-hash-table :test 'equal))
 
@@ -196,9 +216,6 @@
                       (current-buffer)
                       (annotation-details-point prev-annotation)
                       vc-annotate-backend))))
-;;  end of vc-annotate-previous-annotation
-
-(set-face-attribute 'yascroll:thumb-text-area nil :background "white")
 
 (add-to-list
  'save-some-buffers-action-alist
@@ -219,3 +236,46 @@
 (setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups)
 (global-set-key (kbd "s-}") 'tabbar-forward)
 (global-set-key (kbd "s-{") 'tabbar-backward)
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(flycheck-flake8rc nil)
+ '(flycheck-python-pycompile-executable "/usr/local/bin/python3")
+ '(global-flycheck-mode t)
+ '(helm-always-two-windows t)
+ '(helm-buffers-truncate-lines nil)
+ '(helm-ff-file-name-history-use-recentf nil)
+ '(helm-ls-git-fuzzy-match t)
+ '(helm-recentf-fuzzy-match t)
+ '(minimap-automatically-delete-window nil)
+ '(minimap-dedicated-window t)
+ '(minimap-display-semantic-overlays nil)
+ '(minimap-hide-fringes t)
+ '(minimap-major-modes (quote (web-mode)))
+ '(minimap-mode nil)
+ '(minimap-tag-only nil)
+ '(minimap-update-delay 0)
+ '(minimap-window-location (quote right))
+ '(neo-auto-indent-point t)
+ '(neo-force-change-root t)
+ '(neo-theme (quote ascii))
+ '(ns-confirm-quit nil)
+ '(package-selected-packages
+   (quote
+    (whitespace-cleanup-mode string-inflection minimap csv-mode)))
+ '(tabbar-mode t nil (tabbar))
+ '(tabbar-mwheel-mode t nil (tabbar))
+ '(tool-bar-mode nil)
+ '(web-mode-enable-auto-indentation nil))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "White" :foreground "Black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 180 :width normal :foundry "nil" :family "Menlo")))))
