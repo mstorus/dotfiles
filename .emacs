@@ -25,6 +25,7 @@
 (setq my:el-get-packages '(
    ag
    anzu
+   company-lsp
    company-mode
    dtrt-indent
    el-get
@@ -34,6 +35,7 @@
    helm-ag
    helm-ls-git
    lsp-mode
+   lsp-ui
    neotree
    typescript-mode
    web-mode
@@ -94,6 +96,7 @@
 (setq web-mode-indentation-params '("case-extra-offset" . nil))
 (setq web-mode-enable-auto-quoting nil)
 
+(add-hook 'typescript-mode-hook #'lsp)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
@@ -148,7 +151,20 @@
     (when root
       (let ((eslint (expand-file-name "node_modules/eslint/bin/eslint.js" root)))
         (setq-local flycheck-javascript-eslint-executable eslint)))))
+
 (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
+(defun my/use-tslint-from-node-modules ()
+  (let ((root (locate-dominating-file
+               (or (buffer-file-name) default-directory)
+               (lambda (dir)
+                 (let ((tslint (expand-file-name "node_modules/tslint/bin/tslint" dir)))
+                  (and tslint (file-executable-p tslint)))))))
+    (when root
+      (let ((tslint (expand-file-name "node_modules/tslint/bin/tslint" root)))
+        (setq-local flycheck-typescript-tslint-executable tslint)))))
+
+(add-hook 'flycheck-mode-hook #'my/use-tslint-from-node-modules)
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 ;; make underscore part of word
