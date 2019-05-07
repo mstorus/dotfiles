@@ -37,6 +37,7 @@
    lsp-mode
    lsp-ui
    neotree
+   tabbar
    typescript-mode
    web-mode
    yaml-mode
@@ -56,7 +57,7 @@
 (helm-mode 0)
 (global-anzu-mode +1)
 ;(yascroll-bar-mode 1)
-(yas-global-mode 1)
+;(yas-global-mode 1)
 (setq column-number-mode t)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
