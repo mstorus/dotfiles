@@ -5,7 +5,7 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-; MELPA packages: string-inflection, whitespace-cleanup-mode
+; MELPA packages: string-inflection, whitespace-cleanup-mode, reveal-in-osx-finder
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -25,28 +25,38 @@
 (setq my:el-get-packages '(
    ag
    anzu
-   company-lsp
+   ;; company-lsp
+   browse-at-remote
    company-mode
    dtrt-indent
+   docker-tramp
    el-get
    flycheck
    go-mode
    helm
    helm-ag
    helm-ls-git
-   lsp-mode
-   lsp-ui
+   json-mode
+   ;; lsp-mode
+   ;; lsp-ui
    neotree
    tabbar
    typescript-mode
+   sr-speedbar
    web-mode
    yaml-mode
    ;help-mode+
-   ;yascroll
+   yascroll
+   tabbar
+   tide
 ))
 (el-get 'sync my:el-get-packages)
 
+(setq shell-file-name "bash")
+(setq shell-command-switch "-ic")
+
 (setq tramp-default-method "ssh")
+(setq explicit-shell-file-name "/bin/bash")
 
 (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
 
@@ -62,11 +72,13 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
 (setq company-dabbrev-ignore-case nil)
-(tool-bar-mode nil)
+(when (display-graphic-p) (tool-bar-mode -1))
 (blink-cursor-mode nil)
 (windmove-default-keybindings)
 
 (require 'string-inflection)
+(global-set-key (kbd "C-c i") 'string-inflection-cycle)
+(global-set-key (kbd "C-c L") 'string-inflection-lower-camelcase)  ;; Force to lowerCamelCase
 ;(require 'misc)
 ;(global-set-key "\M-f" 'forward-to-word)
 
@@ -97,9 +109,41 @@
 (setq web-mode-indentation-params '("case-extra-offset" . nil))
 (setq web-mode-enable-auto-quoting nil)
 
-(add-hook 'typescript-mode-hook #'lsp)
+(require 'golden-ratio-scroll-screen)
+(global-set-key [remap scroll-down-command] 'golden-ratio-scroll-screen-down)
+(global-set-key [remap scroll-up-command] 'golden-ratio-scroll-screen-up)
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+;; enable typescript-tslint checker
+(with-eval-after-load 'flycheck
+  (flycheck-add-mode 'typescript-tslint 'web-mode))
+
+;; (setq lsp-auto-guess-root t)
+;; (setq lsp-prefer-flymake nil)
+;; (add-hook 'typescript-mode-hook #'lsp)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
   (if (equal web-mode-content-type "jsx")
@@ -112,6 +156,7 @@
 
 (require 'recentf)
 (setq recentf-auto-cleanup 'never) ;; disable before we start recentf! (because of Tramp mode)
+(setq recentf-keep '(file-remote-p file-readable-p)) ;; don't check if remote files exist
 (recentf-mode 1)
 (setq recentf-max-menu-items 50)
 (setq recentf-max-saved-items 50)
@@ -139,7 +184,6 @@
           (lambda ()
             (setq electric-indent-chars '(?\n))))
 
-;; (setq flycheck-javascript-eslint-executable "eslint-project-relative")
 (with-eval-after-load 'flycheck
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
@@ -261,6 +305,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
+ '(company-backends
+   (quote
+    (company-tide company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+                  (company-dabbrev-code company-gtags company-etags company-keywords)
+                  company-oddmuse company-dabbrev)))
  '(flycheck-flake8rc nil)
  '(flycheck-python-pycompile-executable "/usr/local/bin/python3")
  '(global-flycheck-mode t)
@@ -284,10 +333,9 @@
  '(ns-confirm-quit nil)
  '(package-selected-packages
    (quote
-    (whitespace-cleanup-mode string-inflection minimap csv-mode)))
+    (golden-ratio-scroll-screen use-package reveal-in-osx-finder whitespace-cleanup-mode string-inflection minimap csv-mode)))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
- '(tool-bar-mode nil)
  '(web-mode-enable-auto-indentation nil))
 
 (custom-set-faces
