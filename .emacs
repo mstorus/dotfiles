@@ -25,7 +25,7 @@
 (setq my:el-get-packages '(
    ag
    anzu
-   ;; company-lsp
+   company-lsp
    browse-at-remote
    company-mode
    dtrt-indent
@@ -37,8 +37,8 @@
    helm-ag
    helm-ls-git
    json-mode
-   ;; lsp-mode
-   ;; lsp-ui
+   lsp-mode
+   lsp-ui
    neotree
    tabbar
    typescript-mode
@@ -67,7 +67,7 @@
 (helm-mode 0)
 (global-anzu-mode +1)
 ;(yascroll-bar-mode 1)
-;(yas-global-mode 1)
+(yas-global-mode 1)
 (setq column-number-mode t)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
@@ -120,31 +120,38 @@
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
-  (company-mode +1))
+  (company-mode +1)
+  )
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
 
-;; formats the buffer before saving
-(add-hook 'before-save-hook 'tide-format-before-save)
+;; formats the buffer before saving (comment it out if using prettier instead)
+;; (add-hook 'before-save-hook 'tide-format-before-save)
+
+;; (eval-after-load 'web-mode
+;;     '(progn
+;;        (add-hook 'web-mode-hook #'add-node-modules-path)
+;;        (add-hook 'web-mode-hook #'prettier-js-mode)))
 
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
+(eval-after-load 'typescript-mode
+    '(progn
+       (add-hook 'typescript-mode-hook #'add-node-modules-path)
+       (add-hook 'typescript-mode-hook #'prettier-js-mode)))
 
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
-;; enable typescript-tslint checker
-(with-eval-after-load 'flycheck
-  (flycheck-add-mode 'typescript-tslint 'web-mode))
-
-;; (setq lsp-auto-guess-root t)
-;; (setq lsp-prefer-flymake nil)
-;; (add-hook 'typescript-mode-hook #'lsp)
+(setq lsp-auto-guess-root t)
+(setq lsp-prefer-flymake nil)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
+
+(use-package lsp-mode
+  :config
+  (add-hook 'python-mode-hook #'lsp))
+
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
   (if (equal web-mode-content-type "jsx")
       (let ((web-mode-enable-part-face nil))
@@ -152,6 +159,7 @@
     ad-do-it))
 
 (global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
+(setq neo-autorefresh nil)
 (global-set-key [?\C-c ?t] 'neotree-find)
 
 (require 'recentf)
@@ -184,8 +192,8 @@
           (lambda ()
             (setq electric-indent-chars '(?\n))))
 
-(with-eval-after-load 'flycheck
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
+;; (with-eval-after-load 'flycheck
+;;   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (defun my/use-eslint-from-node-modules ()
   (let ((root (locate-dominating-file
@@ -197,7 +205,7 @@
       (let ((eslint (expand-file-name "node_modules/eslint/bin/eslint.js" root)))
         (setq-local flycheck-javascript-eslint-executable eslint)))))
 
-(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+;; (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
 
 (defun my/use-tslint-from-node-modules ()
   (let ((root (locate-dominating-file
@@ -286,6 +294,9 @@
        (revert-buffer :ignore-auto :noconfirm))
    "revert this buffer"))
 
+(setq revert-without-query '(".*"))
+(save-place-mode 1)
+
 (defun my-tabbar-buffer-groups () ;; customize to show all normal files in one group
   "Returns the name of the tab group names the current buffer belongs to.
  There are two groups: Emacs buffers (those whose name starts with '*', plus
@@ -318,12 +329,14 @@
  '(helm-ff-file-name-history-use-recentf nil)
  '(helm-ls-git-fuzzy-match t)
  '(helm-recentf-fuzzy-match t)
+ '(minimap-always-recenter nil)
  '(minimap-automatically-delete-window nil)
  '(minimap-dedicated-window t)
  '(minimap-display-semantic-overlays nil)
  '(minimap-hide-fringes t)
  '(minimap-major-modes (quote (web-mode)))
- '(minimap-mode nil)
+ '(minimap-mode t)
+ '(minimap-recenter-type (quote free))
  '(minimap-tag-only nil)
  '(minimap-update-delay 0)
  '(minimap-window-location (quote right))
@@ -333,7 +346,7 @@
  '(ns-confirm-quit nil)
  '(package-selected-packages
    (quote
-    (golden-ratio-scroll-screen use-package reveal-in-osx-finder whitespace-cleanup-mode string-inflection minimap csv-mode)))
+    (add-node-modules-path golden-ratio-scroll-screen use-package reveal-in-osx-finder whitespace-cleanup-mode string-inflection csv-mode)))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
  '(web-mode-enable-auto-indentation nil))
