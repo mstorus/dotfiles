@@ -49,6 +49,7 @@
    yascroll
    tabbar
    tide
+   use-package
 ))
 (el-get 'sync my:el-get-packages)
 
@@ -73,6 +74,15 @@
 (setq company-dabbrev-downcase nil)
 (setq company-dabbrev-ignore-case nil)
 (when (display-graphic-p) (tool-bar-mode -1))
+
+(defun set-background-for-terminal (&optional frame)
+  (or frame (setq frame (selected-frame)))
+  "unsets the background color in terminal mode"
+  (unless (display-graphic-p frame)
+    (set-face-background 'default "unspecified-bg" frame)))
+(add-hook 'after-make-frame-functions 'set-background-for-terminal)
+(add-hook 'window-setup-hook 'set-background-for-terminal)
+
 (blink-cursor-mode nil)
 (windmove-default-keybindings)
 
@@ -346,7 +356,7 @@
  '(ns-confirm-quit nil)
  '(package-selected-packages
    (quote
-    (add-node-modules-path golden-ratio-scroll-screen use-package reveal-in-osx-finder whitespace-cleanup-mode string-inflection csv-mode)))
+    (dash dumb-jump add-node-modules-path golden-ratio-scroll-screen reveal-in-osx-finder whitespace-cleanup-mode string-inflection csv-mode)))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
  '(web-mode-enable-auto-indentation nil))
