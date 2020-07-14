@@ -162,6 +162,8 @@
   :config
   (add-hook 'python-mode-hook #'lsp))
 
+(add-hook 'go-mode-hook 'lsp-deferred)
+
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
   (if (equal web-mode-content-type "jsx")
       (let ((web-mode-enable-part-face nil))
@@ -356,7 +358,7 @@
  '(ns-confirm-quit nil)
  '(package-selected-packages
    (quote
-    (dash dumb-jump add-node-modules-path golden-ratio-scroll-screen reveal-in-osx-finder whitespace-cleanup-mode string-inflection csv-mode)))
+    (dumb-jump add-node-modules-path golden-ratio-scroll-screen reveal-in-osx-finder whitespace-cleanup-mode string-inflection csv-mode)))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
  '(web-mode-enable-auto-indentation nil))
