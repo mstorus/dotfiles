@@ -5,7 +5,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-; MELPA packages: string-inflection, whitespace-cleanup-mode, reveal-in-osx-finder
+; MELPA packages: string-inflection, whitespace-cleanup-mode, reveal-in-osx-finder, golden-ratio-scroll-screen
+; (setq package-check-signature nil)
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -67,8 +68,8 @@
 (when (display-graphic-p) (setq confirm-kill-emacs 'yes-or-no-p))
 (helm-mode 0)
 (global-anzu-mode +1)
-;(yascroll-bar-mode 1)
-(yas-global-mode 1)
+;; (yascroll-bar-mode 1)
+;; (yas-global-mode 1)
 (setq column-number-mode t)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-dabbrev-downcase nil)
