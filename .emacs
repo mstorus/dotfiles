@@ -54,6 +54,9 @@
 ))
 (el-get 'sync my:el-get-packages)
 
+(load "server")
+(unless (server-running-p) (server-start))
+
 (setq shell-file-name "bash")
 (setq shell-command-switch "-ic")
 

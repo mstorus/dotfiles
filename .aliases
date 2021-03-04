@@ -5,3 +5,4 @@ alias emacs='emacs -nw'
 alias e='emacsclient -a "" -t'
 alias kill-emacs='emacsclient -e "(kill-emacs)"'
 alias ag="ag $* --pager 'less -R'"
+alias Emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -n"
