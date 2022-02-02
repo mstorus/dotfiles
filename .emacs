@@ -1,12 +1,11 @@
 (setq debug-on-error t)
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-; MELPA packages: string-inflection, whitespace-cleanup-mode, reveal-in-osx-finder, golden-ratio-scroll-screen
 ; (setq package-check-signature nil)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -34,6 +33,7 @@
    el-get
    flycheck
    go-mode
+   golden-ratio-scroll-screen
    helm
    helm-ag
    helm-ls-git
@@ -43,8 +43,11 @@
    neotree
    tabbar
    typescript-mode
+   reveal-in-osx-finder
    sr-speedbar
+   string-inflection
    web-mode
+   whitespace-cleanup-mode
    yaml-mode
    ;help-mode+
    yascroll
@@ -360,9 +363,6 @@
  '(neo-force-change-root t)
  '(neo-theme (quote ascii))
  '(ns-confirm-quit nil)
- '(package-selected-packages
-   (quote
-    (dumb-jump add-node-modules-path golden-ratio-scroll-screen reveal-in-osx-finder whitespace-cleanup-mode string-inflection csv-mode)))
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
  '(web-mode-enable-auto-indentation nil))
