@@ -1,11 +1,11 @@
 (setq debug-on-error t)
 
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
 ; (setq package-check-signature nil)
-
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -41,9 +41,10 @@
    lsp-mode
    lsp-ui
    neotree
+   prettier-js
+   reveal-in-osx-finder
    tabbar
    typescript-mode
-   reveal-in-osx-finder
    sr-speedbar
    string-inflection
    web-mode
@@ -70,6 +71,8 @@
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
+
+(setq ns-pop-up-frames nil)
 
 (when (display-graphic-p) (setq confirm-kill-emacs 'yes-or-no-p))
 (helm-mode 0)
@@ -146,10 +149,10 @@
 ;; formats the buffer before saving (comment it out if using prettier instead)
 ;; (add-hook 'before-save-hook 'tide-format-before-save)
 
-;; (eval-after-load 'web-mode
-;;     '(progn
-;;        (add-hook 'web-mode-hook #'add-node-modules-path)
-;;        (add-hook 'web-mode-hook #'prettier-js-mode)))
+(eval-after-load 'web-mode
+    '(progn
+       (add-hook 'web-mode-hook #'add-node-modules-path)
+       (add-hook 'web-mode-hook #'prettier-js-mode)))
 
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 (eval-after-load 'typescript-mode
@@ -180,6 +183,7 @@
 (global-set-key [?\C-c ?f] (quote helm-ls-git-ls))
 (setq neo-autorefresh nil)
 (global-set-key [?\C-c ?t] 'neotree-find)
+(setq-default neo-show-hidden-files t)
 
 (require 'recentf)
 (setq recentf-auto-cleanup 'never) ;; disable before we start recentf! (because of Tramp mode)
@@ -211,8 +215,8 @@
           (lambda ()
             (setq electric-indent-chars '(?\n))))
 
-;; (with-eval-after-load 'flycheck
-;;   (flycheck-add-mode 'javascript-eslint 'web-mode))
+(with-eval-after-load 'flycheck
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (defun my/use-eslint-from-node-modules ()
   (let ((root (locate-dominating-file
@@ -335,11 +339,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
+ '(browse-at-remote-prefer-symbolic nil)
  '(company-backends
-   (quote
-    (company-tide company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+   '(company-tide company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
                   (company-dabbrev-code company-gtags company-etags company-keywords)
-                  company-oddmuse company-dabbrev)))
+                  company-oddmuse company-dabbrev))
  '(flycheck-flake8rc nil)
  '(flycheck-python-pycompile-executable "/usr/local/bin/python3")
  '(global-flycheck-mode t)
@@ -353,15 +357,15 @@
  '(minimap-dedicated-window t)
  '(minimap-display-semantic-overlays nil)
  '(minimap-hide-fringes t)
- '(minimap-major-modes (quote (web-mode)))
+ '(minimap-major-modes '(web-mode))
  '(minimap-mode t)
- '(minimap-recenter-type (quote free))
+ '(minimap-recenter-type 'free)
  '(minimap-tag-only nil)
  '(minimap-update-delay 0)
- '(minimap-window-location (quote right))
+ '(minimap-window-location 'right)
  '(neo-auto-indent-point t)
  '(neo-force-change-root t)
- '(neo-theme (quote ascii))
+ '(neo-theme 'ascii)
  '(ns-confirm-quit nil)
  '(tabbar-mode t nil (tabbar))
  '(tabbar-mwheel-mode t nil (tabbar))
