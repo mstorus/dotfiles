@@ -160,6 +160,11 @@
        (add-hook 'typescript-mode-hook #'add-node-modules-path)
        (add-hook 'typescript-mode-hook #'prettier-js-mode)))
 
+(eval-after-load 'json-mode
+    '(progn
+       (add-hook 'json-mode-hook #'add-node-modules-path)
+       (add-hook 'json-mode-hook #'prettier-js-mode)))
+
 (setq lsp-auto-guess-root t)
 (setq lsp-prefer-flymake nil)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
