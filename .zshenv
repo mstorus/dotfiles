@@ -4,4 +4,4 @@ HISTCONTROL=ignorespace
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-export EDITOR="sudo emacs -nw -Q"
+export EDITOR="emacs -nw -Q"

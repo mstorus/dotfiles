@@ -20,3 +20,15 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 source ~/.nvm/nvm.sh
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
+# Add pyenv to PATH
+export PATH="$HOME/.pyenv/bin:$PATH"
+
+# Initialize pyenv in your shell
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+setopt HIST_IGNORE_SPACE
