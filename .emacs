@@ -29,7 +29,6 @@
    browse-at-remote
    company-mode
    dtrt-indent
-   docker-tramp
    el-get
    flycheck
    go-mode
@@ -52,7 +51,6 @@
    yaml-mode
    ;help-mode+
    yascroll
-   tabbar
    tide
    use-package
 ))
@@ -76,7 +74,8 @@
 
 (when (display-graphic-p) (setq confirm-kill-emacs 'yes-or-no-p))
 (helm-mode 0)
-(global-anzu-mode +1)
+(with-eval-after-load 'anzu
+  (global-anzu-mode +1))
 ;; (yascroll-bar-mode 1)
 ;; (yas-global-mode 1)
 (setq column-number-mode t)
@@ -247,7 +246,8 @@
 
 (add-hook 'flycheck-mode-hook #'my/use-tslint-from-node-modules)
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(with-eval-after-load 'flycheck
+  (global-flycheck-mode))
 ;; make underscore part of word
 (add-hook 'ruby-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
@@ -351,7 +351,6 @@
                   company-oddmuse company-dabbrev))
  '(flycheck-flake8rc nil)
  '(flycheck-python-pycompile-executable "/usr/local/bin/python3")
- '(global-flycheck-mode t)
  '(helm-always-two-windows t)
  '(helm-buffers-truncate-lines nil)
  '(helm-ff-file-name-history-use-recentf nil)
