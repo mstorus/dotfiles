@@ -31,4 +31,6 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 # Initialize pyenv in your shell
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+
+HISTFILE=$HOME/.zsh_history
 setopt HIST_IGNORE_SPACE
